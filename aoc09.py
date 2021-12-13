@@ -53,6 +53,32 @@ def is_lowpoint(height_map, row, col):
     
     return True
 
+
+def is_valid(row, col, height_map, visited):
+    return is_in_bounds(height_map, row, col) and \
+                not visited[row][col]
+
+
+def all_visited(visited):
+    for row in visited:
+        for col in row:
+            if not col:
+                return False
+    return True
+
+
+def dfs(row, col, height_map, visited):
+    if all_visited(visited):
+        return True
+    
+    if is_valid(row, col, height_map, visited):
+        visited[row][col] = True
+        if not height_map[row][col] == 9:
+            pass
+            
+
+
+
 def get_a(height_map):
     lowpoints = []
     for row in range(len(height_map)):
