@@ -68,30 +68,48 @@ def all_visited(visited):
 
 
 def dfs(row, col, height_map, visited):
-    if all_visited(visited):
-        return True
-    
     if is_valid(row, col, height_map, visited):
         visited[row][col] = True
-        if not height_map[row][col] == 9:
-            pass
-            
+        if height_map[row][col] == 9:
+            return 0
+        else:
+            sum = 1
+            sum += dfs(row-1, col, height_map, visited)
+            sum += dfs(row+1, col, height_map, visited)
+            sum += dfs(row, col-1, height_map, visited)
+            sum += dfs(row, col+1, height_map, visited)
+            return sum
+    else:
+        return 0
 
 
+def get_b(height_map, low_coords):
+    visited = [[False for _ in range(len(height_map[0]))] for _ in range(len(height_map))]
+    basin_value = []
+    for row, col in low_coords:
+        basin_value.append(dfs(row, col, height_map, visited))
+    
+    #print(basin_value)
+    basin_value.sort()
+    return basin_value[-1] * basin_value[-2] * basin_value[-3]
 
 def get_a(height_map):
     lowpoints = []
+    low_coords = []
     for row in range(len(height_map)):
         for col in range(len(height_map[0])):
             if is_lowpoint(height_map, row, col):
                 lowpoints.append(height_map[row][col])
-    print(lowpoints)
-    return sum([s + 1 for s in lowpoints])
+                low_coords.append((row, col))
+    #print(lowpoints)
+    return sum([s + 1 for s in lowpoints]), low_coords
     
 if __name__ == "__main__":
-    test_input = get_inputs("test/test09")
-    inputs = get_inputs("inputs/day09")
+    # height_map = get_inputs("test/test09")
+    height_map = get_inputs("inputs/day09")
     #print(test_input)
-    print(get_a(inputs))
+    a_sum, low_coords = get_a(height_map)
+    print(a_sum)
+    print(get_b(height_map, low_coords))
 
     
