@@ -127,5 +127,5 @@ if __name__ == "__main__":
     homework = get_inputs("inputs/day18")
     # homework = get_inputs("test/test18")
 
-    print(do_homework(homework))
-    print(find_largest(homework))
+    print("Homework part 1:", do_homework(homework))
+    print("Homework part 2:", find_largest(homework))
