@@ -5,9 +5,6 @@ def get_inputs(path):
     return dumbos
 
 
-def flash_dumbo(row, col, dumbos):
-    pass
-
 
 def print_dumbos(dumbos):
     for row in dumbos:
@@ -17,22 +14,46 @@ def print_dumbos(dumbos):
         print(str_row)   
 
 
-def increase_energy(dumbos):
-    # print("Before:")
-    # print_dumbos(dumbos)
-    dumbos = [[col + 1 for col in row] for row in dumbos]
-    # print("After:")
-    # print_dumbos(dumbos)
+def in_bounds(dumbos, x, y):
+    return x >= 0 and x < len(dumbos[0]) and y >= 0 and y < len(dumbos)
+
+
+def get_a(dumbos):
+    dumbos = [[d + 1 for d in row] for row in dumbos]
+    flashed = [[False for _ in row] for row in dumbos]
+    again = True
+    flashes = 0
+    while again:
+        again = False
+        for row in range(len(dumbos)):
+            for col in range(len(dumbos[0])):
+                if dumbos[row][col] > 9 and not flashed[row][col]:
+                    flashed[row][col] = True
+                    flashes += 1
+                    for y in range(row - 1, row + 2):
+                        for x in range(col - 1, col + 2):
+                            if in_bounds(dumbos, x, y):
+                                dumbos[y][x] += 1
+                    again = True
+
     for row in range(len(dumbos)):
         for col in range(len(dumbos[0])):
-            
-            pass
-            #dumbos[row][col] += 1
-            #flash_dumbo(dumbo)
+            if flashed[row][col]:
+                dumbos[row][col] = 0
+
+    return dumbos, flashes
 
 
 if __name__ == "__main__":
     dumbos = get_inputs("inputs/day11")
-    dumbos = get_inputs("test/test11")
+    # dumbos = get_inputs("test/test11")
 
-    increase_energy(dumbos)
+    flashes = 0
+    for i in range(1, 300):
+        dumbos, f = get_a(dumbos)
+        if f == 100:
+            print("turn:", i)
+            break
+        flashes += f
+    print_dumbos(dumbos)
+    print(flashes)
